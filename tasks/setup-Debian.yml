@@ -1,0 +1,19 @@
+---
+# tasks file for Debian
+- name: Ensure HAProxy is installed (Debian).
+  apt: name=haproxy state=installed
+
+- name: Make haproxy bindable on non local addresses
+  sysctl:
+    name: net.ipv4.ip_nonlocal_bind
+    value: 1
+    sysctl_set: yes
+    state: present
+  when: haproxy_bind_on_non_local | bool
+
+- name: Ensure HAProxy is started and enabled on boot.
+  service: name=haproxy enabled=yes
+
+- name: Ensure chroot directory exists.
+  file: name={{ haproxy_global.chroot }} state=directory
+  when: haproxy_global.chroot is defined and haproxy_global.chroot

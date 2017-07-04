@@ -5,10 +5,14 @@
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_os_family }}.yml"
 
-# Setup/install tasks.
+# Setup/install tasks for RedHat.
 - include: setup-RedHat.yml
   when: ansible_os_family == 'RedHat'
 
+# Setup/install tasks for Debian.
+- include: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+  
 # Configure tasks.
 - include: configure.yml
   when: haproxy_manage_config
